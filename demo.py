@@ -40,5 +40,12 @@ def register():
     return render_template('register.html', title='Register', form=form)
   
 
+@app.route("/captions")
+def captions():
+    TITLE = "Sir Att Narrates Hello"
+    FILE_NAME = "siratt.wav"
+    return render_template('captions.html', songName=TITLE, file=FILE_NAME)
+  
+
 if __name__ == '__main__':
   app.run(debug=True, host="0.0.0.0")
