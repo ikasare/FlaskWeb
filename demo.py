@@ -77,8 +77,7 @@ def login():
         if not user:
           flash(f'User not found {form.email.data}!')
           return render_template('login.html', title='Login', form=form)
-        pw_hash = bcrypt.generate_password_hash(form.password.data.encode('utf-8'))
-        if not bcrypt.check_password_hash(pw_hash, user[0].password):
+        if not bcrypt.check_password_hash(user[0].password, form.password.data):
           flash(f'Incorrect password for {form.email.data}!')
           return render_template('login.html', title='Login', form=form)
         flash(f'Logged In {form.email.data}!', 'success')
