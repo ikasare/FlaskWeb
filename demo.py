@@ -26,7 +26,16 @@ class User(db.Model):
   password = db.Column(db.String(60), nullable=False)
 
   def __repr__(self):
-    return f"User('{self.username}', '{self.email}', '{self.password}')"
+    return f"User('{self.username}', '{self.email}')"
+  
+# def test():
+#   user = User.query.filter_by(email='cap@case.edu').all()
+#   another = User.query.filter_by(email='fire@case.edu')
+#   pw_hash = bcrypt.generate_password_hash('ikr'.encode('utf-8'))
+#   return user[0].password, another[0].password, pw_hash
+
+# print(test())
+  
   
 
 
