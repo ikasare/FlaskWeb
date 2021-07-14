@@ -61,7 +61,7 @@ def register():
           db.session.commit()
 
       except Exception as e:
-        flash(f'Your account could not be created. This username and/or password already exists!')
+        flash(f'Your account could not be created. This username and/or email already exists!')
       else:
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('home')) # if so - send to home page
