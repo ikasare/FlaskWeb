@@ -81,7 +81,7 @@ def login():
           flash(f'Incorrect password for {form.email.data}!')
           return render_template('login.html', title='Login', form=form)
         flash(f'Logged In {form.email.data}!', 'success')
-        return redirect(url_for('home')) # if so - send to home page
+        return render_template('captions.html', songName="Sir Att Narrates Hello", file=FILE_NAME) # if so - send to captions page
     return render_template('login.html', title='Login', form=form)
     
 
