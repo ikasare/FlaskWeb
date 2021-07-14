@@ -44,14 +44,20 @@ def second_page():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
-    if form.validate_on_submit(): # checks if entries are valid
-        pw_hash = bcrypt.generate_password_hash(form.password.data.encode('utf-8'))
-        user = User(username=form.username.data, email=form.email.data, password=pw_hash)
-        db.session.add(user)
-        db.session.commit()
+    if form.validate_on_submit():# checks if entries are valid
+      try:
+          pw_hash = bcrypt.generate_password_hash(form.password.data).encode('utf-8')
+          user = User(username=form.username.data, email=form.email.data, password=pw_hash)
+          db.session.add(user)
+          db.session.commit()
+
+      except Exception as e:
+        flash(f'The following error occured {e} occured')
+      else:
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('home')) # if so - send to home page
     return render_template('register.html', title='Register', form=form)
+    
   
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -62,7 +68,7 @@ def login():
         if not user:
           flash(f'User not found {form.email.data}!')
           return render_template('login.html', title='Login', form=form)
-        pw_hash = bcrypt.generate_password_hash(form.password.data.encode('utf-8'))
+        pw_hash = bcrypt.generate_password_hash(form.password.data).encode('utf-8')
         if not bcrypt.check_password_hash(pw_hash, user[0].password):
           flash(f'Incorrect password for {form.email.data}!')
           return render_template('login.html', title='Login', form=form)
