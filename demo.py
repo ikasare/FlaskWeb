@@ -1,10 +1,11 @@
 from flask import Flask, render_template, url_for, flash, redirect
 from flask_bcrypt import Bcrypt
-from forms import RegistrationForm
+from forms import RegistrationForm, LoginForm
 from flask_sqlalchemy import SQLAlchemy
 from audio import printWAV
 import time, random, threading
 from turbo_flask import Turbo
+import json
 
 
 app = Flask(__name__)
@@ -25,7 +26,9 @@ class User(db.Model):
   password = db.Column(db.String(60), nullable=False)
 
   def __repr__(self):
-    return f"User('{self.username}', '{self.email}')"
+    return f"User('{self.username}', '{self.email}', '{self.password}')"
+  
+
 
 @app.route("/")
 @app.route("/home")
@@ -42,7 +45,7 @@ def second_page():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit(): # checks if entries are valid
-        pw_hash = bcrypt.generate_password_hash(form.password.data)
+        pw_hash = bcrypt.generate_password_hash(form.password.data.encode('utf-8'))
         user = User(username=form.username.data, email=form.email.data, password=pw_hash)
         db.session.add(user)
         db.session.commit()
@@ -51,6 +54,25 @@ def register():
     return render_template('register.html', title='Register', form=form)
   
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit(): # checks if entries are valid
+        user = User.query.filter_by(email=form.email.data).all()
+        if not user:
+          flash(f'User not found {form.email.data}!')
+          return render_template('login.html', title='Login', form=form)
+        pw_hash = bcrypt.generate_password_hash(form.password.data.encode('utf-8'))
+        if not bcrypt.check_password_hash(pw_hash, user[0].password):
+          flash(f'Incorrect password for {form.email.data}!')
+          return render_template('login.html', title='Login', form=form)
+        flash(f'Logged In {form.email.data}!', 'success')
+        return redirect(url_for('home')) # if so - send to home page
+    return render_template('login.html', title='Login', form=form)
+    
+
+    
+  
 @app.route("/captions")
 def captions():
     TITLE = "Sir Att Narrates Hello"
