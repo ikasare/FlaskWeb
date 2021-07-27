@@ -14,6 +14,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.config['SECRET_KEY'] = '58cb11e106953683a34325b53dfd9c30'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 interval = 10
