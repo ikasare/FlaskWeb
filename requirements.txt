@@ -12,3 +12,4 @@ flask_sqlalchemy
 pytest
 pycodestyle
 cryptography
+flask_bcrypt
