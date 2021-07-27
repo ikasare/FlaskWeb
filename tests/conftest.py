@@ -1,6 +1,6 @@
 import pytest
 
-from demo import demo as flask_app  ##
+from demo import app as flask_app  ##
 
 
 @pytest.fixture
