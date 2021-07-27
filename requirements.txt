@@ -14,3 +14,4 @@ pycodestyle
 cryptography
 Flask-Bcrypt==0.7.1
 SpeechRecognition==3.8.1
+Turbo-Flask==0.6.0
